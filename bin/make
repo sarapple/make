@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'sarawong'
+puts Sarawong.hi(ARGV[0])
