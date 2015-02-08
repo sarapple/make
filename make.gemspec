@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 	s.name = 'make'
-	s.version = '0.1.1'
+	s.version = '0.1.2'
 	s.executables << 'make'
 	s.date = '2014-02-06'
 	s.summary = 'Replace long strings of html with simple functions that create your forms and tables straight from your database.'
@@ -10,5 +10,5 @@ Gem::Specification.new do |s|
 	s.files = ["lib/make.rb", "lib/make/builder.rb"]
 	s.homepage = 
 		'http://rubygems.org/gems/make'
-	s.license = ['Sara Wong', 'Ulysses Lin']
+	s.licenses = ['Sara Wong', 'Ulysses Lin']
 end
