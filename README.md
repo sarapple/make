@@ -1,10 +1,10 @@
 # make
 
-A gem that bypasses typing out long strings of html.
+**Make** is a Ruby on Rails gem that bypasses typing out long strings of html.
 
 By [UlyssesLin](http://github.com/UlyssesLin) and [sarapple](http://github.com/sarapple).
 
-**Make** At its most basic, you can call Make.form(ModelName) or Make.table(ModelName.all), and display the necessary fields and columns associated with that table for quick building and displaying of database info. 
+At its most basic usage, you can call Make.form(ModelName) or Make.table(ModelName.all), and display the necessary fields and columns associated with that Model for quick building and displaying of database info. 
 
 We also have optional parameters you can pass in, if so desired.
 
@@ -22,48 +22,53 @@ Run the following command to install it:
 bundle install
 ``` 
 
-*Optional* Add the following line to your controllers/application_controller.js to make the gem available throughout your application.
+Add the following line to your controllers/application_controller.js to make the gem available throughout your application.
 
 ```application_controller.js
-	require 'make'
+require 'make'
 ``` 
 ## Basic Usage
 
-The following examples assumes 'User' as the name of your model.
+The following examples assume 'User' as the name of your model.
 
 ### Building a Basic Table
+
+Add directly to your view: 
 
 ```erb
 <%= Make.table(User.all) %>
 ```
 
-Alternatively, for cleaner code:
+Alternatively, for cleaner code add to your controller:
 
 ```controller
-	require 'make'
-	@message=Make.table(User.all)
+require 'make'
+@message=Make.table(User.all)
 ```
 ```erb
-	<%= @message %>
+<%= @message %>
 ```
 
 In your controller, all you have to do is call Make.table on a table in your database.
 
-The gem will auto make headers for you based on column names.
+The gem will auto-make headers for you based on column names.
 
 ### Building a Basic Form
+
+In your view file:
 
 ```erb
 <%= Make.form(User) %>
 ```
 
 Your routes should include either:
+
 ```routes.rb
 resources :users
 ```
 OR
 ```routes.rb
-post 'users'
+post '/users'
 ```
 
 ### Generic HTML Header (specifies UTF-8)
@@ -80,14 +85,17 @@ The header populates with generic header content in English. This function is re
 
 ### Building a Customized Table
 
+In your controller: 
 
 ```controller
-	@message=Make.table(User.all,['First Name','Last Name','Email Address'],0,1)
+@message=Make.table(User.all,['First Name','Last Name','Email Address'],0,1)
 ```
+
+In your view
 ```erb
-	<%= @message %>
+<%= @message %>
 ```
-Add table headers, custom column #, custom row #
+The above are optional parameters, consisting of table headers, custom column #, and custom row #.
 
 If you put '0' in for the model name, you make a custom table.
 
@@ -99,10 +107,12 @@ If you have one or more default values that you must specify in your form, send 
 
 { default: { field1_name: field1_value }, { field2_name: fiel2d_value } }
 
+In your view file:
+
 ```erb
 <%= Make.form(Comment, { default: { post_id: post.id, user_id: session[:id] }}) %>
 ```
 
 ## Thank you!
 
-**Make** gem is current and will be maintained until noted otherwise. For any bugs or Ruby-istic concerns, please create an issue on GitHub. 
+**Make** gem is current, still under construction, and will be maintained until noted otherwise. For any bugs or Ruby-istic concerns, please create an issue on GitHub. 
