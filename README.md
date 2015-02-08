@@ -1,6 +1,6 @@
 # make
 
-**Make** is a Ruby on Rails gem that bypasses typing out long strings of html.
+**Make** is a Ruby on Rails gem that connects your database to viewable html.
 
 By [UlyssesLin](http://github.com/UlyssesLin) and [sarapple](http://github.com/sarapple).
 
@@ -12,19 +12,19 @@ We also have optional parameters you can pass in, if so desired.
 
 Add it to your Gemfile:
 
-```Gemfile
+```
 gem 'make'
 ```
 
 Run the following command to install it:
 
-```console
+```
 bundle install
 ``` 
 
 Add the following line to your controllers/application_controller.js to make the gem available throughout your application.
 
-```application_controller.js
+```js
 require 'make'
 ``` 
 ## Basic Usage
@@ -41,7 +41,7 @@ Add directly to your view:
 
 Alternatively, for cleaner code add to your controller:
 
-```controller
+```rb
 require 'make'
 @message=Make.table(User.all)
 ```
@@ -63,11 +63,11 @@ In your view file:
 
 Your routes should include either:
 
-```routes.rb
+```rb
 resources :users
 ```
 OR
-```routes.rb
+```rb
 post '/users'
 ```
 
@@ -87,7 +87,7 @@ The header populates with generic header content in English. This function is re
 
 In your controller: 
 
-```controller
+```rb
 @message=Make.table(User.all,['First Name','Last Name','Email Address'],0,1)
 ```
 
