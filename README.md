@@ -1,2 +1,108 @@
 # make
-A gem that bypasses typing out long strings of html. 
+
+A gem that bypasses typing out long strings of html.
+
+By [UlyssesLin](http://github.com/UlyssesLin) and [sarapple](http://github.com/sarapple).
+
+**Make** At its most basic, you can call Make.form(ModelName) or Make.table(ModelName.all), and display the necessary fields and columns associated with that table for quick building and displaying of database info. 
+
+We also have optional parameters you can pass in, if so desired.
+
+## Setup
+
+Add it to your Gemfile:
+
+```Gemfile
+gem 'make'
+```
+
+Run the following command to install it:
+
+```console
+bundle install
+``` 
+
+*Optional* Add the following line to your controllers/application_controller.js to make the gem available throughout your application.
+
+```application_controller.js
+	require 'make'
+``` 
+## Basic Usage
+
+The following examples assumes 'User' as the name of your model.
+
+### Building a Basic Table
+
+```erb
+<%= Make.table(User.all) %>
+```
+
+Alternatively, for cleaner code:
+
+```controller
+	require 'make'
+	@message=Make.table(User.all)
+```
+```erb
+	<%= @message %>
+```
+
+In your controller, all you have to do is call Make.table on a table in your database.
+
+The gem will auto make headers for you based on column names.
+
+### Building a Basic Form
+
+```erb
+<%= Make.form(User) %>
+```
+
+Your routes should include either:
+```routes.rb
+resources :users
+```
+OR
+```routes.rb
+post 'users'
+```
+
+### Generic HTML Header (specifies UTF-8)
+
+The header populates with generic header content in English. This function is recommended 
+
+```erb
+<head>
+<%= Make.header('MyTitle') %>
+</head>
+```
+
+## Optional Fields
+
+### Building a Customized Table
+
+
+```controller
+	@message=Make.table(User.all,['First Name','Last Name','Email Address'],0,1)
+```
+```erb
+	<%= @message %>
+```
+Add table headers, custom column #, custom row #
+
+If you put '0' in for the model name, you make a custom table.
+
+If you put '0' in for custom col/row #, the gem interprets this as you want a full table of everything in the database.
+
+### Adding default values to Form
+
+If you have one or more default values that you must specify in your form, send the following optional parameter with 'default' as the key:
+
+{ default: { field1_name: field1_value }, { field2_name: fiel2d_value } }
+
+```erb
+<%= Make.form(Comment, { default: { post_id: post.id, user_id: session[:id] }}) %>
+```
+
+## Thank you!
+
+**Make** gem is current and will be maintained until noted otherwise. For any bugs or Ruby-istic concerns, please create an issue on GitHub. 
