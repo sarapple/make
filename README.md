@@ -73,7 +73,7 @@ post '/users'
 
 ### Generic HTML Header (specifies UTF-8)
 
-The header populates with generic header content in English. This function is recommended 
+The header populates with generic header content in English. This function is recommended in your layout files.
 
 ```erb
 <head>
