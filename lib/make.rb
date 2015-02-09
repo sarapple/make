@@ -1,17 +1,19 @@
-require 'make/builder.rb'
+require 'make/header.rb'
+require 'make/form.rb'
+require 'make/table.rb'
+
 module Make
-	def initialize
-		@thead=''
-		@tbody=''
-	end
 	def self.header(title = 'title here')
-		string = Builder.header(title)
+		string = Header.header(title)
 		string = string.html_safe
 		return string
 	end
 	def self.form(input, options = {})
-		string = Builder.form(input.to_s, input.column_names, options)
+		string = Form.form(input.to_s, input.column_names, options)
 		string = string.html_safe
 		return string
+	end
+	def self.table
+		Table.new
 	end
 end
