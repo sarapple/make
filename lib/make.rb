@@ -8,10 +8,8 @@ module Make
 		string = string.html_safe
 		return string
 	end
-	def self.form(input, options = {})
-		string = Form.form(input.to_s, input.column_names, options)
-		string = string.html_safe
-		return string
+	def self.form
+		Form.new
 	end
 	def self.table
 		Table.new
