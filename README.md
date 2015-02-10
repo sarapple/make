@@ -1,18 +1,20 @@
 # make
 
-**Make** is a Ruby on Rails gem that connects your database to viewable html.
+**Make** is a Ruby on Rails gem that takes content from your database to generate html code for forms and tables.
 
 By [UlyssesLin](http://github.com/UlyssesLin) and [sarapple](http://github.com/sarapple).
 
-At its most basic usage, you can call Make.form(ModelName) or Make.table(ModelName.all), and display the necessary fields and columns associated with that Model for quick building and displaying of database info. 
+This gem is designed for every web developer who tediously typed out all the necssary <tr>, <td> and <inputs>, only to have to re-create another form and table again tailored to a new model. 
 
-We also have optional parameters you can pass in, if so desired.
+At its most basic usage, you can call Make.form.model('ModelName').now! or Make.form.model('ModelName').now!, and in very small code generate the necessary fields and columns associated with that Model for quick building and displaying of database info. 
+
+Optional parameters are passed in via chaining methods, which will be discussed in detail below.
 
 ## Setup
 
 Add it to your Gemfile:
 
-```
+```rb
 gem 'make'
 ```
 
@@ -22,7 +24,7 @@ Run the following command to install it:
 bundle install
 ``` 
 
-Add the following line to your controllers/application_controller.js to make the gem available throughout your application.
+Add the following line to your controllers/application_controller.js to make the gem available throughout your application, and you can call Make without requiring it in every controller.
 
 ```js
 require 'make'
@@ -33,36 +35,31 @@ The following examples assume 'User' as the name of your model.
 
 ### Building a Basic Table
 
-Add directly to your view: 
-
-```erb
-<%= Make.table(User.all) %>
-```
-
-Alternatively, for cleaner code add to your controller:
-
+Add directly to your controller:
 ```rb
 require 'make'
-@message=Make.table(User.all)
+@users=Make.form.model('User').now!
 ```
+View file:
 ```erb
-<%= @message %>
+<%= @users %>
 ```
-
-In your controller, all you have to do is call Make.table on a table in your database.
 
 The gem will auto-make headers for you based on column names.
 
 ### Building a Basic Form
 
-In your view file:
-
+In your controller:
+```rb
+require 'make'
+@userForm=Make.form.model('User').now!
+```
+In your corresponding view file:
 ```erb
-<%= Make.form(User) %>
+<%= @userForm %>
 ```
 
-Your routes should include either:
-
+Your config/routes.rb should include either:
 ```rb
 resources :users
 ```
@@ -88,29 +85,66 @@ The header populates with generic header content in English. This function is re
 In your controller: 
 
 ```rb
-@message=Make.table(User.all,['First Name','Last Name','Email Address'],0,1)
+@message=Make.table.model('User')....now!
 ```
-
 In your view
 ```erb
 <%= @message %>
 ```
-The above are optional parameters, consisting of table headers, custom column #, and custom row #.
-
-If you put '0' in for the model name, you make a custom table.
-
-If you put '0' in for custom col/row #, the gem interprets this as you want a full table of everything in the database.
+The ellipsis above contains optional parameters, all of which are chained one after another. The now! at the end compiles all the chained requests into a tailored table.
 
 ### Adding default values to Form
 
-If you have one or more default values that you must specify in your form, send the following optional parameter with 'default' as the key:
+If you have a default hidden value to specify in your form, chain as shown in your controller:
 
-{ default: { field1_name: field1_value }, { field2_name: fiel2d_value } }
-
-In your view file:
-
+```controller
+require 'make'
+@userForm = Make.form.model('User').defaults(admin: false)
+```
+In your view:
 ```erb
-<%= Make.form(Comment, { default: { post_id: post.id, user_id: session[:id] }}) %>
+<%= @userForm %>
+```
+
+### Requiring a confirmation password
+
+By default, if any of your field contain the word password, your input will contain a password field.  The next field defaults to providing a password_confirmation field, but can be turned off manually.
+
+```controller
+require 'make'
+@userForm = Make.form.model('User').confrimation(false)
+```
+In your view:
+```erb
+<%= @userForm %>
+```
+
+### Select Options
+
+.select() expects two parameters at minimum, (1) the target column name and an (2) array of values/options.
+
+```controller
+require 'make'
+@userForm = Make.form.model('User').select('pets', [1,2,3,4,5])
+```
+In your view:
+```erb
+<%= @userForm %>
+```
+
+### Select Options - Association Exists
+
+.select() can also take a third optional parameter, if the values in the array are indexes for anoter table column.
+
+This will take each of the id values from pet_id and translate it to the corresponding pet name [cat, dog, rabbit, hamster, platypus] in the selection options, although the submit value will retain the id.
+
+```controller
+require 'make'
+@userForm = Make.form.model('User').select('pet_id', [1,2,3,4,5], assoc=true)
+```
+In your view:
+```erb
+<%= @userForm %>
 ```
 
 ## Thank you!
