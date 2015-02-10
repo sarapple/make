@@ -4,7 +4,7 @@
 
 By [UlyssesLin](http://github.com/UlyssesLin) and [sarapple](http://github.com/sarapple).
 
-This gem is designed for every web developer who tediously typed out all the necssary <tr>, <td> and <inputs>, only to have to re-create another form and table again tailored to a new model. 
+This gem is designed for every web developer who tediously typed out all the necssary `<tr>`, `<td>` and `<inputs>`, only to have to re-create another form and table again tailored to a new model. 
 
 At its most basic usage, you can call Make.form.model('ModelName').now! or Make.form.model('ModelName').now!, and in very small code generate the necessary fields and columns associated with that Model for quick building and displaying of database info. 
 
@@ -26,7 +26,7 @@ bundle install
 
 Add the following line to your controllers/application_controller.js to make the gem available throughout your application, and you can call Make without requiring it in every controller.
 
-```js
+```rb
 require 'make'
 ``` 
 ## Basic Usage
@@ -97,7 +97,7 @@ The ellipsis above contains optional parameters, all of which are chained one af
 
 If you have a default hidden value to specify in your form, chain as shown in your controller:
 
-```controller
+```rb
 require 'make'
 @userForm = Make.form.model('User').defaults(admin: false)
 ```
@@ -110,7 +110,7 @@ In your view:
 
 By default, if any of your field contain the word password, your input will contain a password field.  The next field defaults to providing a password_confirmation field, but can be turned off manually.
 
-```controller
+```rb
 require 'make'
 @userForm = Make.form.model('User').confrimation(false)
 ```
@@ -123,7 +123,7 @@ In your view:
 
 .select() expects two parameters at minimum, (1) the target column name and an (2) array of values/options.
 
-```controller
+```rb
 require 'make'
 @userForm = Make.form.model('User').select('pets', [1,2,3,4,5])
 ```
@@ -136,9 +136,9 @@ In your view:
 
 .select() can also take a third optional parameter, if the values in the array are indexes for anoter table column.
 
-This will take each of the id values from pet_id and translate it to the corresponding pet name [cat, dog, rabbit, hamster, platypus] in the selection options, although the submit value will retain the id.
+This will take each of the id values from pet_id, go to your Pets model (based on convention) and translate it to the corresponding name in the selection options, [cat, dog, rabbit, hamster, platypus], although the option value will retain the id for convenience.
 
-```controller
+```rb
 require 'make'
 @userForm = Make.form.model('User').select('pet_id', [1,2,3,4,5], assoc=true)
 ```
