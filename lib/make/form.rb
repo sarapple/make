@@ -4,6 +4,7 @@ class Form
 		@formClass='make-form'
 		# By default, set form action and method to create using REST conventions
 		@formMethod='post'
+		@formMethodHidden=nil
 		@formStart=''
 		@formMiddle=[]
 		@formEnd='<input id="authenticity_token" name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"><input type="submit" value="Submit"></form>'
@@ -14,23 +15,47 @@ class Form
 		@selections = []
 		@password_confirmation = true
 		@model = {}
+		@modelName = ''
 		@columns = []
+		@id = nil
 	end
+	# First class method accessed in form, passing in form as a string
+	def model model
+		@modelName = model
+		# Set default form's Action based on REST conventions /users
+		@formAction = "/" + @modelName.downcase + "s"
+		@model = model.constantize
+		return self
+	end
+	# change action url if specific and does not follow REST
+	def action url
+		@formAction = url
+		return self
+	end
+	# Change form class
+	def class myClass
+		@formClass = myClass
+		return self
+	end
+	# Determine default value for a specific field. Because no options exist, it will be hidden.
 	def default column, value
 		@defaults = @defaults.merge({column => value})
  		# remove the created inputs from the columns Array (columnNames).
  		@potential_keys_to_ignore.push(column.to_s)
 	 	return self
 	end
-	def confirm change
+	# Default requires password confirmation, if none is needed change it will no longer require it.
+	def no_pw_confirm
 		@password_confirmation = false
 		return self
 	end
-	def model model
-		@formAction = '/' + model.downcase+"s"
-		@model = model.constantize
+	# Change the form method to put, patch, or delete.
+	def method type, id
+		@formMethodHidden = type
+		@id = id
 		return self
 	end
+	# Similar to default, but instead of a hidden specific value you pass in an array and create a select/option field.
 	def select column, array, assoc = false
 		columnName = column.titleize
 		input = '<label>' + columnName + '</label><select name="' + column + '" value="' + column + '">'
@@ -49,10 +74,16 @@ class Form
 		@formMiddle.push(input)
 		return self
 	end
-	# Build code from class variables
+	# Build starting code from class variables called upon by now!
 	def starter
-		@formStart = '<form class="' + @formClass + '" action="' + @formAction + '" method="' + @formMethod + '">'
+		if @formMethodHidden
+			@formStart = '<form class="' + @formClass + '" action="' + @formAction + '/'+ @id.to_s + '" method="' + @formMethod + '">'
+			@formStart += '<input name="_method" type="hidden" value="' + @formMethodHidden + '">'				
+		else
+			@formStart = '<form class="' + @formClass + '" action="' + @formAction + '" method="' + @formMethod + '">'			
+		end
 	end
+	# Build remaining code from class variables called upon by now!
 	def middle
 		@columns = @keys_to_show + @model.column_names - @default_keys_to_ignore
 		@potential_keys_to_ignore.each do |item|
@@ -82,6 +113,7 @@ class Form
  			@formMiddle.push(input)
  		end
  	end
+ 	# At the end of building the form, return the final string.
 	def now!
 		starter
 		middle
