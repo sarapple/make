@@ -21,7 +21,7 @@ class Form
 	end
 	# First class method accessed in form, passing in form as a string
 	def model model
-		@modelName = model
+		@modelName = model.downcase
 		# Set default form's Action based on REST conventions /users
 		@formAction = "/" + @modelName.downcase + "s"
 		@model = model.constantize
@@ -58,7 +58,7 @@ class Form
 	# Similar to default, but instead of a hidden specific value you pass in an array and create a select/option field.
 	def select column, array, assoc = false
 		columnName = column.titleize
-		input = '<label>' + columnName + '</label><select name="' + column + '" value="' + column + '">'
+		input = '<label>' + columnName + '</label><select name="' + @modelName + '[' + column + ']">'
 		if assoc		#if association is checked true
 			array.each do |id|
 				val = column[0...-3].capitalize.constantize.find(id).attributes.values[1]
@@ -95,19 +95,19 @@ class Form
 		# Create text input labels
 		@columns.each do |column|
 			if column.include? 'password'
-				input = '<label>Password</label><input type="text" name="password">'
+				input = '<label>Password</label><input type="text" name="' + @modelName + '[password]">'
 				@formMiddle.push(input)
 				if @password_confirmation 
-					input = '<label>Confirm Password</label><input type="text" name="password_confirmation">'
+					input = '<label>Confirm Password</label><input type="text"' + @modelName + '[password_confirmation]">'
 					@formMiddle.push(input)			
 				end
 			else
-				input = '<label>' + column.titleize + '</label><input type="text" name="'+column+'">'
+				input = '<label>' + column.titleize + '</label><input type="text" name="' + @modelName + '[' + column + ']">'
 				@formMiddle.push(input)
 			end
 		end
 		@defaults.each_pair do |key, value|
- 			input = '<input type="hidden" name="'+key.to_s+'" value="'+value.to_s+'">'
+ 			input = '<input type="hidden" name="'+ @modelName + '[' + key.to_s + ']" value="' + value.to_s + '">'
  			puts input
  			puts @formMiddle
  			@formMiddle.push(input)
