@@ -10,6 +10,7 @@ class Table
 		@crud=''
 		@all_columns=[]
 		@run_make_head=true
+		@file=false
 	end
 
 	# Assigns desired column names to be combined
@@ -141,7 +142,13 @@ class Table
 	end
 
 	# Writes table html code to 'table_html.txt' file located in application's root folder
-	def file
+	def file!
+		remake_columns
+		if @run_make_head
+			make_head
+		end
+		make_body
+		@file=true
 		File.open('table_html.txt', 'w') { |f| f.write(("<table>\n\t<thead>\n\t\t<tr>"+@thead+"\n\t\t</tr>\n\t</thead>\n\t<tbody>"+@tbody+"\n\t</tbody>\n</table>")) }
 		return self
 	end
@@ -162,11 +169,13 @@ class Table
 
 	# Place table code into view
 	def now!
-		remake_columns
-		if @run_make_head
-			make_head
-		end
-		make_body
+		if !@file
+			remake_columns
+			if @run_make_head
+				make_head
+			end
+			make_body
+		end	
 		return ('<table><thead><tr>'+@thead+'</tr></thead><tbody>'+@tbody+'</tbody></table>').html_safe
 	end
 end
