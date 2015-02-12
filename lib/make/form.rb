@@ -7,7 +7,7 @@ class Form
 		@formMethodHidden=nil
 		@formStart=''
 		@formMiddle=[]
-		@formEnd='\n\t<input id="authenticity_token" name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">\n\t<input type="submit" value="Submit">\n</form>'
+		@formEnd="\n\t<input id=\"authenticity_token\" name=\"authenticity_token\" type=\"hidden\" value=\"<%= form_authenticity_token %>\">\n\t<input type=\"submit\" value=\"Submit\">\n</form>"
 		@default_keys_to_ignore = ['id', 'created_at', 'updated_at']
 		@potential_keys_to_ignore = ['salt']
 		@defaults = {}
@@ -58,29 +58,29 @@ class Form
 	# Similar to default, but instead of a hidden specific value you pass in an array and create a select/option field.
 	def select column, array, assoc = false
 		columnName = column.titleize
-		input = '\n\t<label>' + columnName + '\n\t</label>\n\t<select name="' + @modelName + '[' + column + ']">'
+		input = "\n\t<label>" + columnName + "\n\t</label>\n\t<select name=\"" + @modelName + "[' + column + ']\">"
 		if assoc		#if association is checked true
 			array.each do |id|
 				val = column[0...-3].capitalize.constantize.find(id).attributes.values[1]
-				input += '\n\t\t\t<option value="' + id.to_s + '">' + val.to_s + '</option>'
+				input += "\n\t\t\t<option value=\"" + id.to_s + "\">" + val.to_s + "</option>"
 			end
 		else			#if no associations exist for array
 			array.each do |item| 
-				input += '\n\t\t\t<option value="' + item.to_s + '">' + item.to_s + '</option>'
+				input += "\n\t\t\t<option value=\"" + item.to_s + "\">" + item.to_s + "</option>"
 			end
 		end
 		@potential_keys_to_ignore.push(column)
-		input += '\n\t</select>'
+		input += "\n\t</select>"
 		@formMiddle.push(input)
 		return self
 	end
 	# Build starting code from class variables called upon by now!
 	def starter
 		if @formMethodHidden
-			@formStart = '<form class="' + @formClass + '" action="' + @formAction + '/'+ @id.to_s + '" method="' + @formMethod + '">'
-			@formStart += '\n\t<input name="_method" type="hidden" value="' + @formMethodHidden + '">'				
+			@formStart = "<form class=\"" + @formClass + "\" action=\"" + @formAction + "/"+ @id.to_s + "\" method=\"" + @formMethod + "\">"
+			@formStart += "\n\t<input name=\"_method\" type=\"hidden\" value=\"" + @formMethodHidden + "\">"				
 		else
-			@formStart = '<form class="' + @formClass + '" action="' + @formAction + '" method="' + @formMethod + '">'			
+			@formStart = "<form class=\"" + @formClass + "\" action=\"" + @formAction + "\" method=\"" + @formMethod + "\">"			
 		end
 	end
 	# Build remaining code from class variables called upon by now!
@@ -95,19 +95,19 @@ class Form
 		# Create text input labels
 		@columns.each do |column|
 			if column.include? 'password'
-				input = '\n\t<label>Password</label>\n\t<input type="text" name="' + @modelName + '[password]">'
+				input = "\n\t<label>Password</label>\n\t<input type=\"text\" name=\"" + @modelName + "[password]\">"
 				@formMiddle.push(input)
 				if @password_confirmation 
-					input = '\n\t<label>Confirm Password</label>\n\t<input type="text"' + @modelName + '[password_confirmation]">'
+					input = "\n\t<label>Confirm Password</label>\n\t<input type=\"text\""  + @modelName + "[password_confirmation]\">"
 					@formMiddle.push(input)			
 				end
 			else
-				input = '\n\t<label>' + column.titleize + '\n\t</label>\n\t<input type="text" name="' + @modelName + '[' + column + ']">'
+				input = "\n\t<label>" + column.titleize + "\n\t</label>\n\t<input type=\"text\" name=\"" + @modelName + '[' + column + "]\">"
 				@formMiddle.push(input)
 			end
 		end
 		@defaults.each_pair do |key, value|
- 			input = '\n\t<input type="hidden" name="'+ @modelName + '[' + key.to_s + ']" value="' + value.to_s + '">'
+ 			input = "\n\t<input type=\"hidden\" name=\"" + @modelName + '[' + key.to_s + "]\" value=\"" + value.to_s + "\">"	
  			puts input
  			puts @formMiddle
  			@formMiddle.push(input)
