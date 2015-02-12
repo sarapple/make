@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'sarawong'
-puts Sarawong.hi(ARGV[0])
+require 'make'
+puts make.header(ARGV[0])
