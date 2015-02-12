@@ -6,7 +6,7 @@ By [UlyssesLin](http://github.com/UlyssesLin) and [sarapple](http://github.com/s
 
 This gem is designed for every web developer who tediously typed out all the necssary `<tr>`, `<td>` and `<inputs>`, only to have to re-create another form and table again tailored to a new model. 
 
-At its most basic usage, you can call Make.form.model('ModelName').now! or Make.form.model('ModelName').now!, and in very small code generate the necessary fields and columns associated with that Model for quick building and displaying of database info. 
+At its most basic usage, you can call Make.form.model('ModelName').now! or Make.form.model('ModelName').now!, and in very small code generate the necessary fields and columns associated with that Model and any related Models for quick building and displaying of database info. 
 
 Optional parameters are passed in via chaining methods, which will be discussed in detail below.
 

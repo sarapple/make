@@ -14,7 +14,4 @@ module Make
 	def self.table
 		Table.new
 	end
-	def self.ctable
-		Ctable.new
-	end
 end
