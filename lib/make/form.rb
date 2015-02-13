@@ -58,7 +58,7 @@ class Form
 	# Similar to default, but instead of a hidden specific value you pass in an array and create a select/option field.
 	def select column, array, assoc = false
 		columnName = column.titleize
-		input = "\n\t<label>" + columnName + "\n\t</label>\n\t<select name=\"" + @modelName + "['" + column + "']\">"
+		input = "\n\t<label>" + columnName + "\n\t</label>\n\t<select name=\"" + @modelName + "[" + column + "]\">"
 		if assoc		#if association is checked true
 			array.each do |id|
 				val = column[0...-3].capitalize.constantize.find(id).attributes.values[1]
@@ -95,14 +95,14 @@ class Form
 		# Create text input labels
 		@columns.each do |column|
 			if column.include? 'password'
-				input = "\n\t<label>Password</label>\n\t<input type=\"text\" name=\"" + @modelName + "[password]\">"
+				input = "\n\t<label>Password</label>\n\t<input type=\"password\" name=\"" + @modelName + "[password]\">"
 				@formMiddle.push(input)
 				if @password_confirmation 
-					input = "\n\t<label>Confirm Password</label>\n\t<input type=\"text\""  + @modelName + "[password_confirmation]\">"
+					input = "\n\t<label>Confirm Password</label>\n\t<input type=\"password\" name=\""  + @modelName + "[password_confirmation]\">"
 					@formMiddle.push(input)			
 				end
 			else
-				input = "\n\t<label>" + column.titleize + "\n\t</label>\n\t<input type=\"text\" name=\"" + @modelName + "['" + column + "']\">"
+				input = "\n\t<label>" + column.titleize + "\n\t</label>\n\t<input type=\"text\" name=\"" + @modelName + "[" + column + "]\">"
 				@formMiddle.push(input)
 			end
 		end
