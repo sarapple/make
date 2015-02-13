@@ -83,21 +83,155 @@ The header populates with generic header content in English. This function is re
 </head>
 ```
 
+
+
+
 ## Optional Fields
 
-### Building a Customized Table
+## TABLE
+### Making custom headers
+
+Creates a custom headers.
 
 In your controller: 
 
 ```rb
-@users=Make.table.model('User')....now!
+@users=Make.table.model('Person').th('First','Second','Third','Fourth','Fifth','Sixth','Seventh').now!
 ```
 In your view
 ```erb
 <%= @users %>
 ```
-The ellipsis above contains optional parameters, all of which are chained one after another. The now! at the end compiles all the chained requests into a tailored table.
 
+### Ordering your rows
+
+Orders the data by ASC/DESC.
+
+In your controller: 
+
+```rb
+@users=Make.table.model('Person').order('first_name ASC').now!
+```
+In your view
+```erb
+<%= @users %>
+```
+
+### Cutting default columns
+
+Hides a column that would otherwise display by default.
+
+In your controller: 
+
+```rb
+@users=Make.table.model('Person').cut('first_name','middle_name').now!
+```
+In your view
+```erb
+<%= @users %>
+```
+
+### Limiting row length
+
+Limits the number of rows shown by the given integer; note: do not pass a string.
+
+In your controller: 
+
+```rb
+@users=Make.table.model('Person').limit(4).now!
+```
+In your view
+```erb
+<%= @users %>
+```
+
+### Combining columns
+
+Combines multiple columns into one and creates a name for that new column; you must pass in a hash.
+
+In your controller: 
+
+```rb
+@users=Make.table.model('Person').combo({'Full Name'=>['first_name','middle_name','last_name']}).now!
+```
+In your view
+```erb
+<%= @users %>
+```
+
+### Show hidden columns
+
+Displays a column that by default would be hidden (i.e., 'id', 'created_at', 'updated_at'. Any column containing passwords are always hidden.
+
+In your controller: 
+
+```rb
+@users=Make.table.model('Person').show('id').now!
+```
+In your view
+```erb
+<%= @users %>
+```
+
+### Write literal html code to file
+
+Prints complete html table code in table_html.txt (located in your root application folder)! Just copy it and paste into your html file(s)!
+
+In your controller: 
+
+```rb
+@users=Make.table.model('Person').file!
+```
+In your view
+```erb
+<%= @users %>
+```
+
+### Write for loop html code to file
+
+Prints shorter html table code using for loops in table_html.txt (located in your root application folder)! Just copy it and paste into your html file(s) - note the comment and the line of code needed for your controller file.
+
+In your controller: 
+
+```rb
+@users=Make.table.model('Person').for!('@people')
+```
+In your view
+```erb
+<%= @users %>
+```
+
+### Finalizing your method chain with .now!
+
+Finally renders your table in your chosen view file. If your controller has a line like '@table=Main.table.model('Person').file.now!', then your view file should have '<%= @table %>' - that's it!
+
+In your controller: 
+
+```rb
+@users=Make.table.model('Person').now!
+```
+In your view
+```erb
+<%= @users %>
+```
+
+### Generating empty custom table
+
+Creates a custom-size table with empty cells. Should combine with .th
+
+In your controller: 
+
+```rb
+@users=Make.table.custom(5,15).th('First','Second','Third','Fourth','Fifth').file!
+```
+In your view
+```erb
+<%= @users %>
+```
+
+
+
+## FORM
 ### Adding default values to Form
 
 If you have a default hidden value to specify in your form, chain as shown in your controller:
