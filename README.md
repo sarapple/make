@@ -6,9 +6,14 @@ By [UlyssesLin](http://github.com/UlyssesLin) and [sarapple](http://github.com/s
 
 This gem is designed for every web developer who tediously typed out all the necssary `<tr>`, `<td>` and `<inputs>`, only to have to re-create another form and table again tailored to a new model. 
 
-At its most basic usage, you can call Make.form.model('ModelName').now! or Make.form.model('ModelName').now!, and in very small code generate the necessary fields and columns associated with that Model and any related Models for quick building and displaying of database info. 
+At its most basic usage, you can call Make.form.model('ModelName').now! or Make.form.model('ModelName').now!, and in very small code generate the necessary fields and columns associated with that Model, and any related Models for quick building and displaying of database info. 
 
 Optional parameters are passed in via chaining methods, which will be discussed in detail below.
+
+## Demo
+
+Please view Demo Site for detailed information and how to chain our functions.
+[DemoSite](https://make-gem.herokuapp.com/)
 
 ## Setup
 
@@ -85,11 +90,11 @@ The header populates with generic header content in English. This function is re
 In your controller: 
 
 ```rb
-@message=Make.table.model('User')....now!
+@users=Make.table.model('User')....now!
 ```
 In your view
 ```erb
-<%= @message %>
+<%= @users %>
 ```
 The ellipsis above contains optional parameters, all of which are chained one after another. The now! at the end compiles all the chained requests into a tailored table.
 
@@ -112,7 +117,7 @@ By default, if any of your field contain the word password, your input will cont
 
 ```rb
 require 'make'
-@userForm = Make.form.model('User').confrimation(false)
+@userForm = Make.form.model('User').no_pw_confirm.now!
 ```
 In your view:
 ```erb
