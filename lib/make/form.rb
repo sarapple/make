@@ -66,36 +66,32 @@ class Form
 	def select column, array, assoc = false
 		columnName = column.titleize
 		input = "\n\t<label>" + columnName + "\n\t</label>\n\t<select name=\"" + @modelName + "[" + column + "]\">"
-		if assoc		#if association is checked true
-			array.each do |id|
-				val = column[0...-3].capitalize.constantize.find(id).attributes.values[1]
-				input += "\n\t\t\t<option value=\"" + id.to_s + "\">" + val.to_s + "</option>"
-			end
-		else			#if no associations exist for array
-			array.each do |item| 
-				input += "\n\t\t\t<option value=\"" + item.to_s + "\">" + item.to_s + "</option>"
-			end
-		end
+		input += "\n\t\t\t<option value=\"" + item.to_s + "\">" + item.to_s + "</option>"
 		@potential_keys_to_ignore.push(column)
 		input += "\n\t</select>"
 		@formMiddle.push(input)
 		return self
 	end
 	# Similar to select, but association assumed and specific associated column name can be selected
-	def assoc column, assocColumn, array='all'
+	def assoc column, assoc_column, assoc_model=nil
+		# titleize column
 		columnName = column.titleize
+		# Create for input
 		input = "\n\t<label>" + columnName + "\n\t</label>\n\t<select name=\"" + @modelName + "[" + column + "]\">"
-		assocModel = column[0...-3].capitalize.constantize
-		array = assocModel.distinct.count('id')
-		assocModel.attributes.each_with_index do |attribute, index|
-			if attribute.key == assocColumn
-				assocIndex = index
-			end
+		# Remove _id and take the assocModel unless assocModel exists
+		if assoc_model
+			assoc_model = assoc_model.capitalize.constantize
+		else 
+			assoc_model = column[0...-3].capitalize.constantize
 		end
-		while array > 0
-			val = assocModel.find(id).attributes.values[assocIndex]
-			input += "\n\t\t\t<option value=\"" + id.to_s + "\">" + val.to_s + "</option>"
-			array --
+		# Keep track of how many records exist in assocModel
+		total = assoc_model.distinct.count('id')
+		# run a while loop for as many records there are
+		counter = 1
+		while counter <= total do
+			val = assoc_model.find(counter).attributes[assoc_column]
+			input += "\n\t\t\t<option value=\"" + counter.to_s + "\">" + val.to_s + "</option>"
+			counter+= 1
 		end
 		input += "\n\t</select>"
 		@potential_keys_to_ignore.push(column)
@@ -129,6 +125,9 @@ class Form
 					input = "\n\t<label>Confirm Password</label>\n\t<input type=\"password\" name=\""  + @modelName + "[password_confirmation]\">"
 					@formMiddle.push(input)			
 				end
+			elsif column.include? 'date'
+				input = "\n\t<label>"+column.titleize+"</label>\n\t<input type=\"date\" name=\"" + @modelName + "[" + column + "]\">"
+				@formMiddle.push(input)
 			else
 				input = "\n\t<label>" + column.titleize + "\n\t</label>\n\t<input type=\"text\" name=\"" + @modelName + "[" + column + "]\">"
 				@formMiddle.push(input)
