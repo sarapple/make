@@ -271,15 +271,28 @@ In your view:
 <%= @userForm %>
 ```
 
-### Select Options - Association Exists
+### Association Exists
 
-.select() can also take a third optional parameter, if the values in the array are indexes for anoter table column.
+.assoc() identifies the id as a foreign key to another column.
 
-This will take each of the id values from pet_id, go to your Pets model (based on convention) and translate it to the corresponding name in the selection options, [cat, dog, rabbit, hamster, platypus], although the option value will retain the id for convenience.
+This will take each of the id values from pet_id, go to your Pets model and translate it to the corresponding name in the selection options, [cat, dog, rabbit, hamster, platypus], although the option value will retain the id for convenience.
 
 ```rb
 require 'make'
-@userForm = Make.form.model('User').select('pet_id', [1,2,3,4,5], assoc=true)
+@userForm = Make.form.model('User').assoc('pet_id', 'name')
+```
+In your view:
+```erb
+<%= @userForm %>
+```
+
+### Hide
+
+If there are certain fields in your db you don't want the user to view, you can pass an array of the column-name strings.
+
+```rb
+require 'make'
+@userForm = Make.form.model('User').hide(['admin'])
 ```
 In your view:
 ```erb

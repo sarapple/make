@@ -32,6 +32,13 @@ class Form
 		@formAction = url
 		return self
 	end
+	# hide array of specific fields that should not be submitted through
+	def hide columns
+		columns.each do |col|
+			@potential_keys_to_ignore.push(col.to_s)
+		end
+		return self
+	end
 	# Change form class
 	def class myClass
 		@formClass = myClass
@@ -71,6 +78,27 @@ class Form
 		end
 		@potential_keys_to_ignore.push(column)
 		input += "\n\t</select>"
+		@formMiddle.push(input)
+		return self
+	end
+	# Similar to select, but association assumed and specific associated column name can be selected
+	def assoc column, assocColumn, array='all'
+		columnName = column.titleize
+		input = "\n\t<label>" + columnName + "\n\t</label>\n\t<select name=\"" + @modelName + "[" + column + "]\">"
+		assocModel = column[0...-3].capitalize.constantize
+		array = assocModel.distinct.count('id')
+		assocModel.attributes.each_with_index do |attribute, index|
+			if attribute.key == assocColumn
+				assocIndex = index
+			end
+		end
+		while array > 0
+			val = assocModel.find(id).attributes.values[assocIndex]
+			input += "\n\t\t\t<option value=\"" + id.to_s + "\">" + val.to_s + "</option>"
+			array --
+		end
+		input += "\n\t</select>"
+		@potential_keys_to_ignore.push(column)
 		@formMiddle.push(input)
 		return self
 	end

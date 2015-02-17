@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 	s.name = 'make'
-	s.version = '0.2.7'
+	s.version = '0.2.8'
 	s.executables << 'make'
 	s.date = '2014-02-09'
 	s.summary = 'Replace long strings of html with simple functions that create your forms and tables straight from your database.'
